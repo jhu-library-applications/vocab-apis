@@ -155,7 +155,8 @@ for count, searchTerm in enumerate(searchTerms):
         graph = getGraph(newURL+'.nt', 'nt', 'lc')
         if graph is None:
             continue
-        for s, p, o in graph.triples((None, mads.hasCloseExternalAuthority, None)):
+        for s, p, o in graph.triples((None, mads.hasCloseExternalAuthority,
+                                      None)):
             if 'http://id.worldcat.org/fast/' in o:
                 if result.get('geoname0') is None:
                     # Get linked data of FAST results
@@ -169,12 +170,14 @@ for count, searchTerm in enumerate(searchTerms):
                     if (None, schema.sameAs, nameAuth) in graph:
                         result['nameAuth'] = nameAuth
                         result['fast'] = fastId
-                        objects = graph.objects(subject=None, predicate=schema.sameAs)
+                        objects = graph.objects(subject=None,
+                                                predicate=schema.sameAs)
                         for object in objects:
                             print(object)
                             if 'http://www.geonames.org/' in object:
                                 print('hooray')
-                                label = graph.value(subject=object, predicate=rdfs.label)
+                                label = graph.value(subject=object,
+                                                    predicate=rdfs.label)
                                 result['geoname0'] = object
                                 result['name0'] = label
                                 print(object, label)
@@ -189,6 +192,6 @@ for count, searchTerm in enumerate(searchTerms):
 df_1 = pd.DataFrame.from_dict(all_items)
 print(df_1.columns)
 print(df_1.head)
-dt = datetime.now().strftime('%Y-%m-%d %H.%M.%S')
-newFile = 'geonamesFound'+dt+'.csv'
-df_1.to_csv(path_or_buf=newFile, header='column_names', index=False)
+dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
+newFile = 'geonamesFound_'+dt+'.csv'
+df_1.to_csv(newFile, header='column_names', index=False)

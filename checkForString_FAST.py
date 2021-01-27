@@ -14,11 +14,11 @@ if args.file:
 else:
     filename = input('Enter filename (including \'.csv\'): ')
 
-# Some config for FAST and MESH APIs.
+# Some config for FAST APIs.
 api_base_url = "http://fast.oclc.org/searchfast/fastsuggest"
 fast_uri_base = "http://id.worldcat.org/fast/{0}"
 
-dt = datetime.now().strftime('%Y-%m-%d %H.%M.%S')
+dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 
 #  Find exact matches from FAST API.
@@ -38,7 +38,7 @@ def fastExact_function(search_subject):
                                 auth_name = info.get('auth')
                                 fast_id = info.get('idroot')
                                 ratio = fuzz.token_sort_ratio(auth_name, search_subject)
-                                if auth_name == search_subject or ratio == 100:
+                                if auth_name == search_subject or ratio == 95:
                                     result_dict['auth_name'] = auth_name
                                     result_dict['fast_id'] = fast_id
                                     break
@@ -76,15 +76,15 @@ with open(filename) as itemMetadataFile:
     itemMetadata = csv.DictReader(itemMetadataFile)
     for row in itemMetadata:
         result_dict = {}
-        bib = row['bib']
-        result_dict['bib'] = bib
+        itemID = row['itemID']
+        result_dict['itemID'] = itemID
         search_subject = row['subjects'].strip()
         result_dict['old_subject'] = search_subject
         print(search_subject)
         #  Improve quality of API search.
         search_subject = search_subject.replace(' -- ', ' ')
         search_subject = search_subject.replace('-', ' ')
-        search_subject = search_subject.replace('.', '')
+        search_subject = search_subject.rstrip('.')
         #  Loop through function to find matches.
         fastExact_function(search_subject)
         data = result_dict.get('auth_name')
@@ -98,4 +98,4 @@ with open(filename) as itemMetadataFile:
 df = pd.DataFrame.from_dict(result_list)
 print(df.columns)
 print(df.head)
-df.to_csv(path_or_buf='fastResults_'+dt+'.csv', header='column_names', index=False)
+df.to_csv('fastResults_'+dt+'.csv', index=False)

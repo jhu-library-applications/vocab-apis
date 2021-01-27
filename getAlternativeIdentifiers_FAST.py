@@ -14,7 +14,7 @@ if args.file:
 else:
     filename = input('Enter filename (including \'.csv\'): ')
 
-dt = datetime.now().strftime('%Y-%m-%d %H.%M.%S')
+dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 df_1 = pd.read_csv(filename, header=0)
 fast_ids = df_1.fast_id.to_list()
@@ -46,4 +46,4 @@ for fast_id in fast_ids:
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
 print(df.head)
-df.to_csv(path_or_buf='fastFacets'+dt+'.csv', header='column_names', index=False)
+df.to_csv('fastFacets'+dt+'.csv', header='column_names', index=False)
