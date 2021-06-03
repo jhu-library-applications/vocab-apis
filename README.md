@@ -39,13 +39,13 @@ Here's a quick summary of the endpoints I tend to use, and some of their documen
 Confirms the heading is authorized by retrieving the URIs and label from the APIs.
 
 ### checkForString_FAST.py
-
-**Starting data:** A spreadsheet with strings of possible FAST headings.
+**Starting data:** A spreadsheet with strings of possible FAST headings.<br>
 **APIs:** FAST (Autosuggest), FAST (SRUSearch)
+
 Finds exact and close matches to FAST subject headings.
 
 ### convertIdentifiersToURI.py
-**Starting data**: A spreadsheet with FAST or VIAF identifiers.
+**Starting data**: A spreadsheet with FAST or VIAF identifiers.<br>
 **APIs:** none
 
 Converts FAST and VIAF identifiers to URIs.
@@ -65,11 +65,13 @@ Retrieves alternative identifiers from other authorities (VIAF, GeoNames, LCSH, 
 ### getEuropeanaData.py
 **Starting data**: Europeana item identifier as variable `item`.<br>
 **APIs**: Europeana
+
 Downloads item record in JSON-LD, and saves as file "query.json."
 
 ### getFacetForTerms_FAST.py
 **Starting data**: A spreadsheet with FAST identifiers.<br>
 **APIs**: FAST (read)
+
 Converts the FAST identifier to a link, gets the rdf.xml record, and extracts the facet information (topical, geographical, corporate name, meeting or event, personal name, uniform title, form, period).
 
 ### getFacetForTerms_VIAF.py
