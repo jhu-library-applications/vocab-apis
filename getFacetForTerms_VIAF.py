@@ -2,6 +2,7 @@ import pandas as pd
 import argparse
 from datetime import datetime
 from rdflib import Namespace, Graph, URIRef
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file')
@@ -16,42 +17,43 @@ else:
 dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 df_1 = pd.read_csv(filename, header=0)
-fast_ids = df_1.fast_id.to_list()
+viaf_ids = df_1.viaf_id.to_list()
 
 headers = {'User-Agent': 'Custom user agent'}
 skos = Namespace('http://www.w3.org/2004/02/skos/core#')
 schema = Namespace('http://schema.org/')
 rdf = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-baseURL = 'http://id.worldcat.org/fast/'
+baseURL = 'http://www.viaf.org/viaf/'
+lc_base = 'http://id.loc.gov/authorities/names/'
 ext = '.rdf.xml'
+json = '/justlinks.json'
+
+facets = ['PersonalName', 'CorporateName', 'FamilyName', 'Geographic', 'Title',
+          'ConferenceName']
 
 all_items = []
-for link in fast_ids:
+for link in viaf_ids:
     tinyDict = {}
-    tinyDict['fastID'] = link
+    tinyDict['viaf_id'] = link
+    links = requests.get(link+json, timeout=30, headers=headers).json()
+    lc_id = links.get('LC')
+    lc_id = lc_id[0]
+    link = lc_base+lc_id
     g = Graph()
-    # id = fast_id[3:].strip()
-    # print(id)
-    full_link = link+ext
-    data = g.parse(full_link, timeout=30, headers=headers, format='xml')
+    data = g.parse(link+ext, timeout=30, headers=headers, format='xml')
     uri = URIRef(link)
     preflabel = g.value(uri, skos.prefLabel)
     print(preflabel)
-    tinyDict['label.worldcat'] = preflabel
-    facets = g.objects(uri, skos.inScheme)
-    for facet in facets:
-        if 'facet' in facet:
-            facet = facet.replace(baseURL+"ontology/1.0/#facet-", "")
-            print(facet)
-            tinyDict['facet'] = facet
-    for externalID in g.objects(None, schema.sameAs):
-        print(externalID)
-        if 'viaf' in externalID:
-            tinyDict['viaf'] = externalID
+    tinyDict['label.loc'] = preflabel
+    types = g.objects(uri, rdf.type)
+    for type in types:
+        for facet in facets:
+            if facet in type:
+                tinyDict['facet'] = facet
     all_items.append(tinyDict)
 
 
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
 print(df.head)
-df.to_csv('fastFacets_'+dt+'.csv', header='column_names', index=False)
+df.to_csv('viafFacets_'+dt+'.csv', header='column_names', index=False)

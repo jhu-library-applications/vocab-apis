@@ -29,7 +29,7 @@ lc = requests.Session()
 ft = requests.Session()
 geo = requests.Session()
 
-# Some config for FAST APIs.
+# Some config for loc APIs.
 labelBase = 'http://id.loc.gov/authorities/names/label/'
 ext = '.rdf.xml'
 
