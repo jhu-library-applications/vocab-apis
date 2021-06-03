@@ -11,7 +11,7 @@ Here's a quick summary of the endpoints I tend to use, and some of their documen
 | FAST (read)                              | http://id.worldcat.org/fast                  | [FAST Linked Data API](https://www.oclc.org/developer/develop/web-services/fast-api/linked-data.en.html) |
 | FAST (Autosuggest)                       | http://fast.oclc.org/searchfast/fastsuggest  | [FAST Linked Data API](https://www.oclc.org/developer/develop/web-services/fast-api/linked-data.en.html) |
 | FAST (SRUSearch)                         | http://id.worldcat.org/fast/search           | [FAST Linked Data API](https://www.oclc.org/developer/develop/web-services/fast-api/linked-data.en.html) |
-| FAST (search, actually the best results) | http://experimental.worldcat.org/fast/search | [FAST Linked Data API](https://www.oclc.org/developer/develop/web-services/fast-api/linked-data.en.html) |
+| FAST (search, actually the best results) | http://experimental.worldcat.org/fast/search | not documented as an official endpoint idk? |
 | GeoNames                                 | https://sws.geonames.org/                    | [GeoNames Web Services Documentation](http://www.geonames.org/export/) |
 | Library of Congress Authorities          | http://id.loc.gov/authorities/               | [LOC Linked Data Service: Technical Center](https://id.loc.gov/techcenter/) |
 | VIAF                                     | http://www.viaf.org/viaf/                    | [VIAF Authority Cluster Resource](https://www.oclc.org/developer/develop/web-services/viaf/authority-cluster.en.html) |
