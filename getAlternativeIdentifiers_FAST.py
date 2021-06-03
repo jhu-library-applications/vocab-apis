@@ -46,4 +46,4 @@ for fast_id in fast_ids:
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
 print(df.head)
-df.to_csv('fastFacets'+dt+'.csv', header='column_names', index=False)
+df.to_csv('alternativeIds'+dt+'.csv', header='column_names', index=False)
