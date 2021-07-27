@@ -14,8 +14,8 @@ else:
     filename = input('Enter filename (including \'.csv\'): ')
 
 
-columnList = ['fast_id', 'geo_id']
-df = pd.read_csv(filename, header=0)
+columnList = ['lc_id']
+df = pd.read_csv(filename)
 
 
 # Configure namespaces.
@@ -43,45 +43,45 @@ def convertLinks(url):
 
 all_items = []
 for count, row in df.iterrows():
-    tinyDict = {}
-    for column in columnList:
-        tinyDict['id'] = row['identifier']
-        item = row[column]
-        item = str(item)
-        item = item.strip()
-        if 'id.worldcat' in item:
-            g = Graph()
-            data = g.parse(item, timeout=30, headers=headers, format='xml')
-            uri = URIRef(item)
-            preflabel = g.value(uri, skos.prefLabel)
-            print(preflabel)
-            tinyDict['uri.worldcat'] = uri
-            tinyDict['label.worldcat'] = preflabel
-        elif 'geonames' in item:
-            item = convertLinks(item)
-            print(item)
-            g = Graph()
-            data = g.parse(item, timeout=30, headers=headers, format='xml')
-            uri = URIRef(item.rstrip('about.rdf'))
-            preflabel = g.value(uri, gn.name)
-            print(preflabel)
-            tinyDict['uri.geo'] = uri
-            tinyDict['label.geo'] = preflabel
-        elif 'viaf' in item:
-            g = Graph()
-            data = g.parse(item, timeout=30, headers=headers)
-            print(data)
-            tinyDict['uri.viaf'] = uri
-            tinyDict['label.viaf'] = preflabel
-        elif 'aat' in item:
-            g = Graph()
-            data = g.parse(item, timeout=30, headers=headers)
-            print(data)
-            tinyDict['uri.aat'] = uri
-            tinyDict['label.aat'] = preflabel
-        else:
-            pass
-    all_items.append(tinyDict)
+    row = row
+    item = row['lc_id']
+    item = str(item)
+    item = item.strip()
+    print(item)
+    if 'id.loc' in item:
+        print('hi')
+        g = Graph()
+        data = g.parse(item+'.rdf.xml', timeout=0.001, headers=headers)
+        uri = URIRef(item)
+        preflabel = g.value(uri, skos.prefLabel)
+        print(preflabel)
+        row['uri.worldcat'] = uri
+        row['label.worldcat'] = preflabel
+    elif 'geonames' in item:
+        item = convertLinks(item)
+        print(item)
+        g = Graph()
+        data = g.parse(item, timeout=30, headers=headers, format='xml')
+        uri = URIRef(item.rstrip('about.rdf'))
+        preflabel = g.value(uri, gn.name)
+        print(preflabel)
+        row['uri.geo'] = uri
+        row['label.geo'] = preflabel
+    elif 'viaf' in item:
+        g = Graph()
+        data = g.parse(item, timeout=30, headers=headers)
+        print(data)
+        row['uri.viaf'] = uri
+        row['label.viaf'] = preflabel
+    elif 'aat' in item:
+        g = Graph()
+        data = g.parse(item, timeout=30, headers=headers)
+        print(data)
+        row['uri.aat'] = uri
+        row['label.aat'] = preflabel
+    else:
+        pass
+    all_items.append(row)
 
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
