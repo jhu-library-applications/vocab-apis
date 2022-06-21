@@ -7,17 +7,22 @@ from rdflib import Namespace
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file')
+parser.add_argument('-c', '--column')
 args = parser.parse_args()
 
 if args.file:
     filename = args.file
 else:
     filename = input('Enter filename (including \'.csv\'): ')
+if args.column:
+    columnName = args.column
+else:
+    columnName = input('name of column: ')
 
 dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 df_1 = pd.read_csv(filename, header=0)
-searchTerms = df_1.subject.to_list()
+searchTerms = df_1[columnName].to_list()
 
 
 # Configuration for requests.

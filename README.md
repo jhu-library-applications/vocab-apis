@@ -2,7 +2,7 @@
 
 ## API resources
 
-Here's a quick summary of the endpoints I tend to use, and some of their documentation. 
+Here's a quick summary of the endpoints I tend to use, and some of their documentation.
 
 | vocabulary                               | endpoint                                     | API Documentation                                            |
 | ---------------------------------------- | -------------------------------------------- | ------------------------------------------------------------ |
@@ -33,7 +33,7 @@ Here's a quick summary of the endpoints I tend to use, and some of their documen
 ## Scripts
 
 ### [authorizeHeadings.py](authorizeHeadings.py)
-**Starting data:** A spreadsheet that lists heading with their vocabularies (FAST or LCNAF).<br>
+**Starting data:** A spreadsheet that searches a string heading in LCNAF and FAST and produces a URI if there is an exact match.<br>
 **APIs:** Library of Congress Authorities, FAST (SRUSearch)
 
 Confirms the heading is authorized by retrieving the URIs and label from the APIs.
@@ -78,7 +78,7 @@ Converts the FAST identifier to a link, gets the rdf.xml record, and extracts th
 **Starting data**: A spreadsheet of VIAF URIs formatted like https://viaf.org/viaf/149920363. The script won't work if there is an ending dash (ex: https://viaf.org/viaf/149920363/).<br>
 **APIs**: VIAF, Library of Congress Authorities
 
-Takes a list of VIAF URIs from a spreadsheet, finds the LCNAF authority record, and extracts the facet information from the rdf.xml record. 
+Takes a list of VIAF URIs from a spreadsheet, finds the LCNAF authority record, and extracts the facet information from the rdf.xml record.
 
 ### [getGeoNames_LCNAF.py](getGeoNames_LCNAF.py)
  **Starting data**: A spreadsheet with geographic headers (from FAST or LCNAF).<br>

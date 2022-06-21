@@ -51,7 +51,7 @@ for item in searchTerms:
     vocab = item.get('vocab')
     searchTerm = item.get('term')
     print(vocab, searchTerm)
-    searchTerm.rstrip('.')
+    searchTerm = searchTerm.rstrip('.')
     result = {'term': searchTerm}
     type = authorities.get(vocab)
     if vocab != 'fast':
@@ -84,6 +84,7 @@ for item in searchTerms:
             print('Heading validated')
             result['authLabel'] = authLabel
             result['authURI'] = identifier
+    all_items.append(result)
 
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
