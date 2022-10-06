@@ -28,8 +28,8 @@ ext = '.rdf.xml'
 all_items = []
 for fast_id in fast_ids:
     g = Graph()
-    id = fast_id[3:].strip()
-    link = baseURL+id+ext
+    identifier = fast_id[3:].strip()
+    link = baseURL+identifier+ext
     graph = g.parse(link, format='xml')
     objects = graph.objects(subject=None, predicate=schema.sameAs)
     tinyDict = {'fast_id': fast_id}

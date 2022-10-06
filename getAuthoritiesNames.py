@@ -2,8 +2,7 @@ import requests
 import pandas as pd
 import argparse
 from datetime import datetime
-from bs4 import BeautifulSoup as Soup
-from rdflib import Namespace, Graph, URIRef
+from rdflib import Namespace, Graph, URIRef, exceptions
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file')
@@ -18,8 +17,7 @@ else:
 dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 df_1 = pd.read_csv(filename, header=0)
-searchTerms = df_1.to_dict('records')
-
+searchTerms = df_1['name'].to_list()
 
 # Configuration for requests.
 headers = {'User-Agent': 'Custom user agent'}
@@ -30,52 +28,59 @@ mads = Namespace('http://www.loc.gov/mads/rdf/v1#')
 auth = URIRef('http://id.loc.gov/authorities/')
 
 
-
-def getGraph(url, format):
+def get_graph(url):
     g = Graph()
     try:
-        data = lc.get(url, timeout=30, headers=headers)
-        data = data.text
-        graph = g.parse(data=data, format=format)
+        response = lc.get(url, timeout=30, headers=headers)
+        text_data = response.text
+        parsed_graph = g.parse(data=text_data)
     except requests.exceptions.Timeout:
-        graph = None
-    return graph
+        parsed_graph = None
+    except exceptions.ParserError:
+        parsed_graph = None
+    return parsed_graph
 
 
 all_items = []
-for item in searchTerms:
-    vocab = item.get('vocab')
-    searchTerm = item.get('term')
-    print(vocab, searchTerm)
+for searchTerm in searchTerms:
+    print(searchTerm)
     searchTerm = searchTerm.rstrip('.')
     result = {'term': searchTerm}
-    url = baseURL+'names/label/'+searchTerm
-    data = lc.get(url, timeout=30, headers=headers)
+    label_url = baseURL+'names/label/'+searchTerm
+    data = lc.get(label_url, timeout=30, headers=headers)
     foundName = data.ok
     newURL = data.url
     if foundName:
         newURL = data.url
         newURL = newURL.replace('-781', '')
-        newURL = newURL.replace('.html', '')
+        newURL = newURL.replace('https', 'http')
+        newURL = newURL.replace('.html', '.nt')
         print(newURL)
-        graph = getGraph(newURL+'.nt', 'nt')
-        for item in graph.subject_objects(mads.authoritativeLabel):
-            if 'authorities/names' in item[0]:
-                if item[1].value == searchTerm:
-                    print('Heading validated')
-                    uri = item[0]
-                    result['lcnaf_URI'] = item[0]
-                    result['lcnaf_Label'] = item[1].value
-        for item in graph.objects(subject=URIRef(uri), predicate=mads.hasCloseExternalAuthority):
-            if 'fast' in item:
-                result['fast_URI'] = item
-        for item in graph.objects(subject=URIRef(uri), predicate=mads.useFor):
-            print(item)
-            if 'subjects' in item:
-                result['lcsh_URI'] = item
+        graph = get_graph(newURL)
+        if graph:
+            for item in graph.subject_objects(mads.authoritativeLabel):
+                if 'authorities/names' in item[0]:
+                    if item[1].value == searchTerm:
+                        print('Heading validated')
+                        uri = item[0]
+                        result['lcnaf_URI'] = item[0]
+                        result['lcnaf_Label'] = item[1].value
+            for item in graph.objects(subject=URIRef(uri), predicate=mads.hasCloseExternalAuthority):
+                if 'fast' in item:
+                    result['fast_URI'] = item
+            for item in graph.objects(subject=URIRef(uri), predicate=mads.hasExactExternalAuthority):
+                if 'viaf' in item:
+                    response = requests.get(item)
+                    viaf_url = response.url
+                    viaf_url = viaf_url.replace('/#skos:Concept', '')
+                    result['viaf_URI'] = viaf_url
+            for item in graph.objects(subject=URIRef(uri), predicate=mads.useFor):
+                print(item)
+                if 'subjects' in item:
+                    result['lcsh_URI'] = item
     all_items.append(result)
 
 df = pd.DataFrame.from_dict(all_items)
 print(df.columns)
 print(df.head)
-df.to_csv('authorizedHeadingResults_'+dt+'.csv', index=False)
+df.to_csv('authorizedNamesResults_'+dt+'.csv', index=False)

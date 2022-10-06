@@ -33,13 +33,12 @@ ext = '&redirects=yes&props=claims&languages=en&languagefallback=1&utf8=1'
 
 properties = ['P527', 'P279', 'P361']
 all_items = []
-for id in id_list:
-    newInfo = {}
-    newInfo['id'] = id
-    link = wiki+id+ext
+for identifier in id_list:
+    newInfo = {'identifier': identifier}
+    link = wiki + identifier + ext
     data = wd.get(link, timeout=30, headers=headers).json()
     entity = data.get('entities')
-    item = entity.get(id)
+    item = entity.get(identifier)
     claims = item.get('claims')
     for claim in claims:
         print(claim)
@@ -49,9 +48,9 @@ for id in id_list:
                 mainsnak = item.get('mainsnak')
                 datavalue = mainsnak.get('datavalue')
                 value = datavalue.get('value')
-                id = value.get('id')
-                print(claim, id)
-                newInfo[claim] = id
+                identifier = value.get('identifier')
+                print(claim, identifier)
+                newInfo[claim] = identifier
     all_items.append(newInfo)
 
 

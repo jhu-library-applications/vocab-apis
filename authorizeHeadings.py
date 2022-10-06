@@ -35,15 +35,15 @@ authorities = {'lcnaf': 'names',
                'genre': 'genreForms'}
 
 
-def getGraph(url, format):
+def get_graph(url):
     g = Graph()
     try:
-        data = lc.get(url, timeout=30, headers=headers)
-        data = data.text
-        graph = g.parse(data=data, format=format)
+        response = lc.get(url, timeout=30, headers=headers)
+        text_data = response.text
+        parsed_graph = g.parse(data=text_data)
     except requests.exceptions.Timeout:
-        graph = None
-    return graph
+        parsed_graph = None
+    return parsed_graph
 
 
 all_items = []
@@ -63,8 +63,8 @@ for item in searchTerms:
             newURL = data.url
             newURL = newURL.replace('.html', '')
             print(newURL)
-            graph = getGraph(newURL+'.nt', 'nt')
-            for item in graph.subject_objects((mads.authoritativeLabel)):
+            graph = get_graph(newURL + '.nt')
+            for item in graph.subject_objects(mads.authoritativeLabel):
                 if auth+type in item[0]:
                     if item[1].value == searchTerm:
                         print('Heading validated')

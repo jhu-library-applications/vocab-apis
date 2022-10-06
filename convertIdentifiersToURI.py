@@ -45,6 +45,4 @@ new_df = pd.DataFrame.from_records(uriList, index='index')
 print(new_df.head)
 
 df_1.update(new_df)
-
-
 df_1.to_csv(filename+'_'+dt+'.csv', index=False)

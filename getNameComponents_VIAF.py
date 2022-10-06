@@ -2,7 +2,7 @@ import pandas as pd
 import argparse
 from datetime import datetime
 import requests
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as Et
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file')
@@ -15,9 +15,11 @@ else:
 
 
 df_1 = pd.read_csv(filename, header=0)
-viaf_ids = df_1.viaf_id.to_list()
+df_1.dropna(subset=['viaf_id'], inplace=True)
+viaf_ids = df_1['viaf_id'].to_list()
+print(viaf_ids)
 
-headers = {'User-Agent': 'Custom user agent'}
+headers = {'User-Agent': 'Custom user agent', 'Content-Type': 'application/json+links'}
 baseURL = 'http://www.viaf.org/viaf/'
 lc_base = 'http://id.loc.gov/authorities/names/'
 json = '/justlinks.json'
@@ -41,23 +43,23 @@ facetDict = {'100': personal, '110': corporate, '111': corporate,
              '147': event}
 
 
-def findfacet(marctags):
+def find_facet(marctags):
     facet = facetDict.get(marctags)
     return facet
 
 
-def convertSubfield(subfield, facet):
+def convert_subfield(subfield, facet):
     subfield = facet.get(subfield)
     return subfield
 
 
 all_items = []
 for link in viaf_ids:
-    tinyDict = {}
-    tinyDict['viaf_id'] = link
+    tinyDict = {'viaf_id': link}
+    link = link+json
     print(link)
     if pd.notna(link):
-        links = requests.get(link+json, timeout=30, headers=headers).json()
+        links = requests.get(link, timeout=30, headers=headers).json()
         if isinstance(links, dict):
             lc_id = links.get('LC')
             if lc_id:
@@ -67,19 +69,19 @@ for link in viaf_ids:
                 print(link)
                 data = requests.get(link+'.marcxml.xml', timeout=30, headers=headers)
                 data = data.text
-                root = ET.fromstring(data)
+                root = Et.fromstring(data)
                 for child in root:
                     fields = child.attrib
                     marctags = fields.get('tag')
                     if marctags in name_fields:
-                        facet = findfacet(marctags)
+                        facet = find_facet(marctags)
                         tinyDict['facet'] = facet.get('type')
                         for c in child:
                             component = c.text
                             component = component.rstrip(',')
                             subdict = c.attrib
                             subfield = subdict.get('code')
-                            subfield = convertSubfield(subfield, facet)
+                            subfield = convert_subfield(subfield, facet)
                             if tinyDict.get(subfield) is None:
                                 tinyDict[subfield] = component
                             else:

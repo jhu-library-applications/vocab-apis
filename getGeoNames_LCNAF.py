@@ -7,7 +7,7 @@ from datetime import datetime
 # Convert geographic names from LCNAF to geonames identifiers.
 # Example: Baltimore County (Md.) n79018713
 # --> Baltimore County https://www.geonames.org/4347790
-# Also builds full hierarchal name: Baltimore County, Maryland, United States
+# Also builds full hierarchical name: Baltimore County, Maryland, United States
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file', help='Enter filename with csv.')

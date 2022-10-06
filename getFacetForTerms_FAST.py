@@ -27,17 +27,16 @@ ext = '.rdf.xml'
 
 all_items = []
 for link in fast_ids:
-    tinyDict = {}
-    tinyDict['fastID'] = link
+    tinyDict = {'fastID': link}
     g = Graph()
     # id = fast_id[3:].strip()
     # print(id)
     full_link = link+ext
     data = g.parse(full_link, timeout=30, headers=headers, format='xml')
     uri = URIRef(link)
-    preflabel = g.value(uri, skos.prefLabel)
-    print(preflabel)
-    tinyDict['label.worldcat'] = preflabel
+    pref_label = g.value(uri, skos.prefLabel)
+    print(pref_label)
+    tinyDict['label.worldcat'] = pref_label
     facets = g.objects(uri, skos.inScheme)
     for facet in facets:
         if 'facet' in facet:

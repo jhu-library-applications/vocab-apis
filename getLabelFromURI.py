@@ -25,7 +25,7 @@ rdfs = Namespace('http://www.w3.org/2000/01/rdf-schema#')
 gn = Namespace('http://www.geonames.org/ontology#')
 
 
-def convertLinks(url):
+def convert_links(url):
     url = url.rstrip('/')
     if 'https://sws' in url:
         url = url+'/about.rdf'
@@ -53,32 +53,32 @@ for count, row in df.iterrows():
         g = Graph()
         data = g.parse(item+'.rdf.xml', timeout=0.001, headers=headers)
         uri = URIRef(item)
-        preflabel = g.value(uri, skos.prefLabel)
-        print(preflabel)
+        pref_label = g.value(uri, skos.prefLabel)
+        print(pref_label)
         row['uri.worldcat'] = uri
-        row['label.worldcat'] = preflabel
+        row['label.worldcat'] = pref_label
     elif 'geonames' in item:
-        item = convertLinks(item)
+        item = convert_links(item)
         print(item)
         g = Graph()
         data = g.parse(item, timeout=30, headers=headers, format='xml')
         uri = URIRef(item.rstrip('about.rdf'))
-        preflabel = g.value(uri, gn.name)
-        print(preflabel)
+        pref_label = g.value(uri, gn.name)
+        print(pref_label)
         row['uri.geo'] = uri
-        row['label.geo'] = preflabel
+        row['label.geo'] = pref_label
     elif 'viaf' in item:
         g = Graph()
         data = g.parse(item, timeout=30, headers=headers)
         print(data)
         row['uri.viaf'] = uri
-        row['label.viaf'] = preflabel
+        row['label.viaf'] = pref_label
     elif 'aat' in item:
         g = Graph()
         data = g.parse(item, timeout=30, headers=headers)
         print(data)
         row['uri.aat'] = uri
-        row['label.aat'] = preflabel
+        row['label.aat'] = pref_label
     else:
         pass
     all_items.append(row)
