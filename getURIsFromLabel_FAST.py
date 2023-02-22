@@ -37,7 +37,7 @@ mads = Namespace('http://www.loc.gov/mads/rdf/v1#')
 all_items = []
 for label in searchTerms:
     result = {}
-    label = label.strip()
+    label = str(label).strip()
     data = ft.get(fastURL+label+fastPara)
     data = data.content
     data = data.decode('utf-8')
@@ -48,7 +48,7 @@ for label in searchTerms:
             identifier = record.find('dct:identifier')
             identifier = identifier.string
             authLabel = record.find('skos:preflabel')
-            authLabel = authLabel.string
+            authLabel = str(authLabel.string)
             if authLabel == label:
                 print(authLabel)
                 result['authLabel'] = authLabel

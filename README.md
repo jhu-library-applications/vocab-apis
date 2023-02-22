@@ -33,19 +33,19 @@ Here's a quick summary of the endpoints I tend to use, and some of their documen
 
 ## Scripts
 
-### [authorizeHeadings.py](authorizeHeadings.py)
+### [authorizeHeadings.py](authorizeFASTAndLCAuthorityHeadings.py)
 **Starting data:** A spreadsheet that searches a string heading in LCNAF and FAST and produces a URI if there is an exact match.<br>
 **APIs:** Library of Congress Authorities, FAST (SRUSearch)
 
 Confirms the heading is authorized by retrieving the URIs and label from the APIs.
 
-### [searchForStringMatch_FAST.py](searchForStringMatch_FAST.py)
+### [searchForStringMatch_FAST.py](searchForStringMatchInFAST.py)
 **Starting data:** A spreadsheet with strings of possible FAST headings.<br>
 **APIs:** FAST (Autosuggest), FAST (SRUSearch)
 
 Finds exact and close matches to FAST subject headings.
 
-### [convertIdentifiersToURI.py](convertIdentifiersToURI.py)
+### [convertIdentifiersToURI.py](convertFASTAndVIAFIdentifiersToURI.py)
 **Starting data**: A spreadsheet with FAST or VIAF identifiers.<br>
 **APIs:** none
 
@@ -57,13 +57,13 @@ Converts FAST and VIAF identifiers to URIs.
 
 Converts years into written out decades as given in FAST.
 
-### [getAlternativeIdentifiers_FAST.py](getAlternativeIdentifiers_FAST.py)
+### [getAlternativeIdentifiers_FAST.py](getAlternativeIdentifiersFromFAST.py)
 **Starting data**: A spreadsheet with FAST identifiers.<br>
 **APIs**: FAST (read)
 
 Retrieves alternative identifiers from other authorities (VIAF, GeoNames, LCSH, etc.) given in FAST records.
 
-### [getAuthoritiesNames.py](getAuthoritiesNames.py)
+### [getAuthoritiesNames.py](getURIsFromLabel_LCAuthoritiesAndVIAF.py)
 **Starting data**: A spreadsheet with Library of Congress Names.<br>
 **APIs**: Library of Congress Authorities   
 

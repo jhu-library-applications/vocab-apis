@@ -16,7 +16,7 @@ else:
 dt = datetime.now().strftime('%Y-%m-%d_%H.%M.%S')
 
 df_1 = pd.read_csv(filename, header=0)
-fast_ids = df_1.fast_id.to_list()
+fast_ids = df_1.URI.to_list()
 
 headers = {'User-Agent': 'Custom user agent'}
 skos = Namespace('http://www.w3.org/2004/02/skos/core#')

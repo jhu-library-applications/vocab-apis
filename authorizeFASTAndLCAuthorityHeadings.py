@@ -78,7 +78,7 @@ for item in searchTerms:
         identifier = record.find('dct:identifier')
         identifier = identifier.string
         authLabel = record.find('skos:preflabel')
-        authLabel = authLabel.string
+        authLabel = str(authLabel.string)
         print(authLabel)
         if authLabel == searchTerm:
             print('Heading validated')

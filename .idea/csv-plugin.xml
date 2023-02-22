@@ -3,21 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="$USER_HOME$/Desktop/addToSheetTwo_names_2022-10-04 16.21.26 - mergedMultiple_2022-10-04 16.21.26.csv.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/Desktop/authorizedNamesResults_2022-10-06.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="/authorizedNamesResults_2022-10-05_15.26.45.csv">
+        <entry key="/sample_data.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

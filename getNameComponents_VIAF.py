@@ -15,8 +15,8 @@ else:
 
 
 df_1 = pd.read_csv(filename, header=0)
-df_1.dropna(subset=['viaf_id'], inplace=True)
-viaf_ids = df_1['viaf_id'].to_list()
+df_1.dropna(subset=['URI'], inplace=True)
+viaf_ids = df_1['URI'].to_list()
 print(viaf_ids)
 
 headers = {'User-Agent': 'Custom user agent', 'Content-Type': 'application/json+links'}
