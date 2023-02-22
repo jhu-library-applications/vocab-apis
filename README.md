@@ -33,85 +33,114 @@ Here's a quick summary of the endpoints I tend to use, and some of their documen
 
 ## Scripts
 
-### [authorizeHeadings.py](authorizeFASTAndLCAuthorityHeadings.py)
+### searchForStringMatch
+
+#### [authorizeFASTAndLCAuthorityHeadings.py](searchForStringMatch/authorizeFASTAndLCAuthorityHeadings.py)
 **Starting data:** A spreadsheet that searches a string heading in LCNAF and FAST and produces a URI if there is an exact match.<br>
 **APIs:** Library of Congress Authorities, FAST (SRUSearch)
 
 Confirms the heading is authorized by retrieving the URIs and label from the APIs.
 
-### [searchForStringMatch_FAST.py](searchForStringMatchInFAST.py)
+#### [searchForStringMatchInFAST.py](searchForStringMatch/searchForStringMatchInFAST.py)
 **Starting data:** A spreadsheet with strings of possible FAST headings.<br>
 **APIs:** FAST (Autosuggest), FAST (SRUSearch)
 
 Finds exact and close matches to FAST subject headings.
 
-### [convertIdentifiersToURI.py](convertFASTAndVIAFIdentifiersToURI.py)
-**Starting data**: A spreadsheet with FAST or VIAF identifiers.<br>
-**APIs:** none
+### getItemMetadata
 
-Converts FAST and VIAF identifiers to URIs.
-
-### [convertYearsToFASTDecades.py](convertYearsToFASTDecades.py)
-**Starting data**: A spreadsheet with year dates from 1800s onwards.<br>
-**APIs**: none
-
-Converts years into written out decades as given in FAST.
-
-### [getAlternativeIdentifiers_FAST.py](getAlternativeIdentifiersFromFAST.py)
-**Starting data**: A spreadsheet with FAST identifiers.<br>
-**APIs**: FAST (read)
-
-Retrieves alternative identifiers from other authorities (VIAF, GeoNames, LCSH, etc.) given in FAST records.
-
-### [getAuthoritiesNames.py](getURIsFromLabel_LCAuthoritiesAndVIAF.py)
-**Starting data**: A spreadsheet with Library of Congress Names.<br>
-**APIs**: Library of Congress Authorities   
-
-Retrieves the LCNAF URI for the searched named and grabbed alternative identifiers from other authorities (FAST and LCSH)  in the records.
-
-### [getEuropeanaData.py](getEuropeanaData.py)
+#### [getEuropeanaData.py](getItemMetadata/getEuropeanaData.py)
 **Starting data**: Europeana item identifier as variable `item`.<br>
 **APIs**: Europeana
 
 Downloads item record in JSON-LD, and saves as file "query.json."
 
-### [getFacetForTerms_FAST.py](getFacetForTerms_FAST.py)
+#### [getItemMetadataFromInternetArchive.py](getItemMetadata/getItemMetadataFromInternetArchive.py)
+**Starting data**: Internet Archive item identifier as variable `internet_id`.<br>
+**APIs**: Internet Archive
+
+Downloads item record in JSON and saves metadata in CSV.
+
+#### [getPropertiesWikiData.py](getItemMetadata/getPropertiesWikiData.py)
+**Starting data**: Entity id from WikiData.<br>
+**APIs**: Wikidata
+
+Finds properties of entity and saves in CSV.
+
+
+### Convert
+
+#### [convertFASTAndVIAFIdentifiersToURI.py](convert/convertFASTAndVIAFIdentifiersToURI.py)
+**Starting data**: A spreadsheet with FAST or VIAF identifiers.<br>
+**APIs:** none
+
+Converts FAST and VIAF identifiers to URIs.
+
+#### [convertLCNAFToGeonames.py](convert/convertLCNAFToGeonames.py)
+**Starting data**: A spreadsheet with geographic headers (from FAST or LCNAF).<br>
+**APIs**: FAST (read), Library of Congress Authorities, GeoNames
+
+Convert geographic names from LCNAF to geonames identifiers. Example: Baltimore County (Md.) n79018713 is converted to Baltimore County https://www.geonames.org/4347790. It also builds full hierarchical name: Baltimore County, Maryland, United States from GeoNames.
+
+#### [convertLSCHToFAST.py](convert/convertLSCHToFAST.py)
+**Starting data**: A spreadsheet with Library of Congress Subject Headings.<br>
+**APIs**: FAST (read), Library of Congress Authorities
+
+Converts LCSH to one or more FAST headings.
+
+#### [convertYearsToFASTDecades.py](convert/convertYearsToFASTDecades.py)
+**Starting data**: A spreadsheet with year dates from 1800s onwards.<br>
+**APIs**: none
+
+Converts years into written out decades as given in FAST.
+
+### getAdditionalPropertiesFromIdentifiers
+
+#### [getAlternativeIdentifiersFromFAST.py](getAdditionalPropertiesFromIdentifier/getAlternativeIdentifiersFromFAST.py)
+**Starting data**: A spreadsheet with FAST identifiers.<br>
+**APIs**: FAST (read)
+
+Retrieves alternative identifiers from other authorities (VIAF, GeoNames, LCSH, etc.) given in FAST records.
+
+#### [getFacetForTerms_FAST.py](getAdditionalPropertiesFromIdentifier/getFacetForTerms_FAST.py)
 **Starting data**: A spreadsheet with FAST identifiers.<br>
 **APIs**: FAST (read)
 
 Converts the FAST identifier to a link, gets the rdf.xml record, and extracts the facet information (topical, geographical, corporate name, meeting or event, personal name, uniform title, form, period).
 
-### [getFacetForTerms_VIAF.py](getFacetForTerms_VIAF.py)
+#### [getFacetForTerms_VIAF.py](getAdditionalPropertiesFromIdentifier/getFacetForTerms_VIAF.py)
 **Starting data**: A spreadsheet of VIAF URIs formatted like https://viaf.org/viaf/149920363. The script won't work if there is an ending dash (ex: https://viaf.org/viaf/149920363/).<br>
 **APIs**: VIAF, Library of Congress Authorities
 
 Takes a list of VIAF URIs from a spreadsheet, finds the LCNAF authority record, and extracts the facet information from the rdf.xml record.
 
-### [getGeoNames_LCNAF.py](getGeoNames_LCNAF.py)
- **Starting data**: A spreadsheet with geographic headers (from FAST or LCNAF).<br>
-**APIs**: FAST (read), Library of Congress Authorities, GeoNames
-
-Convert geographic names from LCNAF to geonames identifiers. Example: Baltimore County (Md.) n79018713 is converted to Baltimore County https://www.geonames.org/4347790. It also builds full hierarchical name: Baltimore County, Maryland, United States from GeoNames.
-
-### [getLabelFromURI.py](getLabelFromURI.py)
+#### [getLabelFromURI.py](getAdditionalPropertiesFromIdentifier/getLabelFromURI.py)
 **Starting data**: A spreadsheet with URIs from the FAST, Library of Congress Authorities, GeoNames, VIAF, or AAT vocabularies.<br>
 **APIs:** FAST (read), Library of Congress Authorities, GeoNames, VIAF, AAT
 
 Retrieves the authorized heading or label from the correct vocabulary using the URIs.
 
-### [getNameComponents_VIAF.py](getNameComponents_VIAF.py)
+#### [getNameComponents_VIAF.py](getAdditionalPropertiesFromIdentifier/getNameComponents_VIAF.py)
 **Starting data**: A spreadsheet of VIAF URIs formatted like https://viaf.org/viaf/149920363. The script won't work if there is an ending dash (ex: https://viaf.org/viaf/149920363/).<br>
 **APIs:** VIAF, Library of Congress Authorities
 
 Takes a list of VIAF URIs from a spreadsheet, finds the LCNAF authority record, and extracts the name components from the .marcxml.xml record.
 
-### [getURIsFromLabel_AAT.py](getURIsFromLabel_AAT.py)
+### Get URIs from authorized headings or labels
+
+#### [getURIsFromLabel_LCAuthoritiesAndVIAF.py](getURIsFromLabel/getURIsFromLabel_LCAuthoritiesAndVIAF.py)
+**Starting data**: A spreadsheet with Library of Congress Names.<br>
+**APIs**: Library of Congress Authorities   
+
+Retrieves the LCNAF URI for the searched named and grabbed alternative identifiers from other authorities (FAST and LC Authorities (LCNAF, LCSH, LCGFT))  in the records.
+
+#### [getURIsFromLabel_AAT.py](getURIsFromLabel/getURIsFromLabel_AAT.py)
 **Starting data**: String in variable `label_search`.<br>
 **APIs**: AAT
 
 Retrieves AAT URI by searching for the label in the API.
 
-### [getURIsFromLabel_FAST.py](getURIsFromLabel_FAST.py)
+#### [getURIsFromLabel_FAST.py](getURIsFromLabel/getURIsFromLabel_FAST.py)
 **Starting data**: A spreadsheet with FAST string headings.<br>
 **APIs**: FAST (read), FAST (search)
 
