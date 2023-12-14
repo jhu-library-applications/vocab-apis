@@ -43,16 +43,19 @@ for label in searchTerms:
     data = data.decode('utf-8')
     soup = Soup(data, features='lxml')
     records = soup.find('records')
-    for record in records:
-        if bool(result) is False:
-            identifier = record.find('dct:identifier')
-            identifier = identifier.string
-            authLabel = record.find('skos:preflabel')
-            authLabel = str(authLabel.string)
-            if authLabel == label:
-                print(authLabel)
-                result['authLabel'] = authLabel
-                result['authURI'] = baseURL+identifier
+    if records:
+        for record in records:
+            if bool(result) is False:
+                identifier = record.find('dct:identifier')
+                identifier = identifier.string
+                authLabel = record.find('skos:preflabel')
+                authLabel = str(authLabel.string)
+                if authLabel == label:
+                    print(authLabel)
+                    result['authLabel'] = authLabel
+                    result['authURI'] = baseURL+identifier
+    else:
+        pass
     result['original_label'] = label
     all_items.append(result)
 

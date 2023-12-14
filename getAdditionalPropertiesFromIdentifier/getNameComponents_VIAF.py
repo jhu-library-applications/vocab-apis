@@ -67,7 +67,10 @@ for link in viaf_ids:
                 link = lc_base+lc_id
                 tinyDict['lc_link'] = link
                 print(link)
-                data = requests.get(link+'.marcxml.xml', timeout=30, headers=headers)
+                try:
+                    data = requests.get(link+'.marcxml.xml', timeout=30, headers=headers)
+                except requests.Timeout:
+                    break
                 data = data.text
                 root = Et.fromstring(data)
                 for child in root:

@@ -44,7 +44,6 @@ def get_graph(url):
 all_items = []
 for searchTerm in searchTerms:
     print(searchTerm)
-    searchTerm = searchTerm.rstrip('.')
     result = {'term': searchTerm}
     label_url = baseURL+'names/label/'+searchTerm
     data = lc.get(label_url, timeout=30, headers=headers)
